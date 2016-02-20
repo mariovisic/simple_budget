@@ -23,13 +23,17 @@ ActiveRecord::Schema.define(version: 20160220053707) do
     t.datetime "updated_at",                              null: false
   end
 
-  create_table "line_items", force: :cascade do |t|
-    t.string   "name",                                  null: false
-    t.string   "company",                               null: false
-    t.decimal  "amount",       precision: 10, scale: 2, null: false
-    t.datetime "purchased_at",                          null: false
-    t.datetime "created_at",                            null: false
-    t.datetime "updated_at",                            null: false
+  create_table "transactions", force: :cascade do |t|
+    t.string   "name",                                                    null: false
+    t.string   "company",                                                 null: false
+    t.decimal  "amount",         precision: 10, scale: 2,                 null: false
+    t.datetime "purchased_at",                                            null: false
+    t.boolean  "weekly_deposit",                          default: false, null: false
+    t.integer  "budget_id",                                               null: false
+    t.datetime "created_at",                                              null: false
+    t.datetime "updated_at",                                              null: false
   end
+
+  add_index "transactions", ["budget_id"], name: "index_transactions_on_budget_id", using: :btree
 
 end

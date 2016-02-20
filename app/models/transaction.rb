@@ -1,2 +1,2 @@
-class LineItem < ActiveRecord::Base
+class Transaction < ActiveRecord::Base
 end

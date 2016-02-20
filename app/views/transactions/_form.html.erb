@@ -1,0 +1,8 @@
+<%= simple_form_for @transaction_form do |form| %>
+  <%= form.input :budget_id, as: :select, collection: @transaction_form.budget_options, include_blank: false %>
+  <%= form.input :name %>
+  <%= form.input :company %>
+  <%= form.input :amount, as: :currency %>
+  <%= form.input :purchased_at %>
+  <%= form.submit class: 'btn btn-primary' %>
+<% end %>
