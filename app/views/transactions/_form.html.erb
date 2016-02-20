@@ -1,8 +1,8 @@
 <%= simple_form_for @transaction_form do |form| %>
   <%= form.input :budget_id, as: :select, collection: @transaction_form.budget_options, include_blank: false %>
   <%= form.input :purchased_at %>
-  <%= form.input :name %>
-  <%= form.input :company %>
+  <%= form.input :name, input_html: { autocomplete: 'off' } %>
+  <%= form.input :company, input_html: { autocomplete: 'off' } %>
   <%= form.input :amount, as: :currency %>
   <%= form.submit class: 'btn btn-primary' %>
 <% end %>
@@ -17,6 +17,16 @@
       autoclose: true,
       todayHighlight: true,
       format: "dd/mm/yyyy"
+    });
+
+    $('#transaction_name').typeahead({
+      source: <%= Transaction.pluck(:name).uniq.to_json.html_safe %>,
+      afterSelect: function() { setTimeout(function() { $('#transaction_company').trigger('focus'); }, 10); }
+    });
+
+    $('#transaction_company').typeahead({
+      source: <%= Transaction.pluck(:company).uniq.to_json.html_safe %>,
+      afterSelect: function() { setTimeout(function() { $('#transaction_amount').trigger('focus'); }, 10); }
     });
   });
 </script>
