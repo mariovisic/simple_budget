@@ -1,5 +1,6 @@
 class BudgetsController < ApplicationController
   def index
+    @budgets = Budget.all
   end
 
   def new
@@ -14,6 +15,30 @@ class BudgetsController < ApplicationController
     else
       render :new
     end
+  end
+
+  def edit
+    budget = Budget.find(params[:id])
+
+    @budget_form = BudgetForm.new(budget.attributes)
+  end
+
+  def update
+    budget = Budget.find(params[:id])
+    @budget_form = BudgetForm.new(budget.attributes.merge(budget_params))
+
+    if @budget_form.save
+      redirect_to budgets_path, flash: { notice: "#{budget.name} updated" }
+    else
+      render :new
+    end
+  end
+
+  def destroy
+    @budget = Budget.find(params[:id])
+    @budget.destroy
+
+    redirect_to budgets_path, flash: { notice: "#{@budget.name} deleted" }
   end
 
   private

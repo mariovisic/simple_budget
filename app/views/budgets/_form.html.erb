@@ -1,0 +1,5 @@
+<%= simple_form_for @budget_form do |form| %>
+  <%= form.input :name %>
+  <%= form.input :weekly_deposit, as: :currency, hint: 'Deposited every Monday' %>
+  <%= form.submit class: 'btn btn-primary' %>
+<% end %>
