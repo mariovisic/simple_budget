@@ -2,7 +2,6 @@ class TransactionForm
   include ActiveModel::Model
 
   attr_accessor :id, :name, :company, :amount, :purchased_at, :created_at, :updated_at, :budget_id
-  attr_writer :purchased_at
   validates :name, :company, :amount, :purchased_at, presence: true
   validates :amount, numericality: { greater_than_or_equal_to: 0 }
 
@@ -23,8 +22,7 @@ class TransactionForm
   end
 
   def attributes
-    { }
-    # FIXME
+    { budget_id: budget_id, name: name, company: company, amount: amount, purchased_at: purchased_at }
   end
 
   def model_name

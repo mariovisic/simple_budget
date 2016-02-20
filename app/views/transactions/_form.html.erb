@@ -1,16 +1,16 @@
 <%= simple_form_for @transaction_form do |form| %>
   <%= form.input :budget_id, as: :select, collection: @transaction_form.budget_options, include_blank: false %>
+  <%= form.input :purchased_at %>
   <%= form.input :name %>
   <%= form.input :company %>
   <%= form.input :amount, as: :currency %>
-  <%= form.input :purchased_at %>
   <%= form.submit class: 'btn btn-primary' %>
 <% end %>
 
 <script>
   $(document).ready(function() {
     if($('#transaction_purchased_at').val() == "") {
-      $('#transaction_purchased_at').val(moment().format("DD/MM/YYYY hh:MMA"))
+      $('#transaction_purchased_at').val(moment().format("DD/MM/YYYY hh:MM A"))
     }
 
     $('#transaction_purchased_at').datepicker({
