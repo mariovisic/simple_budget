@@ -3,7 +3,7 @@ class TransactionForm
 
   attr_accessor :id, :name, :company, :amount, :purchased_at, :created_at, :updated_at, :budget_id
   validates :name, :company, :amount, :purchased_at, presence: true
-  validates :amount, numericality: { greater_than_or_equal_to: 0 }
+  validates :amount, numericality: true
 
   def save
     valid? && persist_budget
