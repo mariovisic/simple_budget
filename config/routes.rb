@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
-  root 'budgets#index'
+  root to: redirect('transactions')
 
   resources :budgets, only: [ :index, :new, :create, :edit, :update, :destroy ]
+  resources :transactions, only: [ :index, :new ]
 end

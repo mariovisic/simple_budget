@@ -1,4 +1,4 @@
-class CreateLineItems < ActiveRecord::Migration
+class CreateTransactions < ActiveRecord::Migration
   def change
     create_table :line_items do |t|
       t.string :name, null: false
