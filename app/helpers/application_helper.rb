@@ -7,11 +7,11 @@ module ApplicationHelper
     end
   end
 
-  def format_date(date)
-    if date.today?
-      date.strftime("%l:%M %p")
+  def format_date(datetime)
+    if datetime.today? && datetime != datetime.beginning_of_day
+      datetime.strftime("%l:%M %p")
     else
-      date.strftime("%a %e %b")
+      datetime.strftime("%a %e %b")
     end
   end
 end
