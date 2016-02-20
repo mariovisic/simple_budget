@@ -2,6 +2,7 @@ class TransactionForm
   include ActiveModel::Model
 
   attr_accessor :id, :name, :company, :amount, :purchased_at, :created_at, :updated_at, :budget_id
+  attr_writer :purchased_at
   validates :name, :company, :amount, :purchased_at, presence: true
   validates :amount, numericality: { greater_than_or_equal_to: 0 }
 
