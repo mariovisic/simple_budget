@@ -22,8 +22,8 @@ class BudgetSummary
 
   def current_state_css_class
     case weekly_spent_percentage / week_completed_percentage.to_f * 100
-    when 0..80 then 'success'
-    when 80..100 then 'info'
+    when 0..90 then 'success'
+    when 90..100 then 'info'
     when 100..110 then 'warning'
     else
       'danger'
