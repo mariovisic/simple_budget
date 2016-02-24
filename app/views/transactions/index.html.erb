@@ -1,19 +1,25 @@
 <p><%= link_to 'New Transaction', new_transaction_path, class: 'btn btn-primary' %></p>
 
-<table class="table table-striped">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Amount</th>
-      <th>When</th>
-    </tr>
-  </thead>
-  <% @transactions.each do |transaction| %>
-    <tr>
-      <td><%= transaction.name %> (<%= transaction.company %>)</td>
-      <td><%= number_to_currency(transaction.amount) %></td>
-      <td><%= format_date(transaction.purchased_at) %></td>
-    </tr>
-  <% end %>
-</table>
-
+<div class="panel panel-info">
+  <div class="panel-heading">
+    <h3 class="panel-title">Transactions</h3>
+  </div>
+  <div class="panel-body">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Amount</th>
+        <th>When</th>
+      </tr>
+    </thead>
+    <% @transactions.each do |transaction| %>
+      <tr>
+        <td><%= transaction.name %> (<%= transaction.company %>)</td>
+        <td><%= smart_number_to_currency(transaction.amount) %></td>
+        <td><%= format_date(transaction.purchased_at) %></td>
+      </tr>
+    <% end %>
+  </table>
+  </div>
+</div>

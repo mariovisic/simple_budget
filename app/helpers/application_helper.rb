@@ -14,4 +14,11 @@ module ApplicationHelper
       datetime.strftime("%a %e %b")
     end
   end
+
+  def smart_number_to_currency(number, options = {})
+    number = 0 if number == -0
+    options.reverse_merge!(precision: 0) if number.to_i == number
+
+    number_to_currency(number, options)
+  end
 end

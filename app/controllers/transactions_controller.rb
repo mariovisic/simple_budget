@@ -11,7 +11,7 @@ class TransactionsController < ApplicationController
     @transaction_form = TransactionForm.new(transaction_params)
 
     if @transaction_form.save
-      redirect_to transactions_path, flash: { notice: 'Transaction created' }
+      redirect_to root_path, flash: { notice: "Added #{@transaction_form.name}" }
     else
       render :new
     end
