@@ -35,7 +35,7 @@ class BudgetSummary
   end
 
   def week_completed_percentage
-    (remaining_seconds_this_week / (60 * 60 * 24 * 7).to_f * 100).floor
+    (elapsed_seconds_this_week / (60 * 60 * 24 * 7).to_f * 100).floor
   end
 
   def weekly_spent_percentage
@@ -86,8 +86,8 @@ class BudgetSummary
 
   private
 
-  def remaining_seconds_this_week
-    (Time.now.next_week - Time.now).to_i
+  def elapsed_seconds_this_week
+    (Time.now - Time.now.beginning_of_week).to_i
   end
 
   def balance_at_start_of_week
