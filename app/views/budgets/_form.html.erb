@@ -1,5 +1,9 @@
 <%= simple_form_for @budget_form do |form| %>
   <%= form.input :name %>
   <%= form.input :weekly_deposit, as: :currency, hint: 'Deposited every Monday' %>
+
+  <% if @budget_form.persisted? %>
+    <%= link_to 'Delete Budget', budget_path(@budget_form.id), class: 'btn btn-danger', 'data-confirm' => "Are you sure you want to delete #{@budget_form.name}?", 'data-method' => 'delete' %>
+  <% end %>
   <%= form.submit class: 'btn btn-primary' %>
 <% end %>

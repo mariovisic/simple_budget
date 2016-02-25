@@ -14,3 +14,9 @@
   font-size: 0.8em;
   line-height: 2.5em;
 }
+
+.table-row-link {
+  display: block;
+  text-decoration: none !important;
+  color: inherit;
+}
