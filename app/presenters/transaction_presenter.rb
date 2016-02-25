@@ -14,13 +14,29 @@ class TransactionPresenter < ApplicationPresenter
   end
 
   def row_class
-    @transaction.weekly_deposit && 'info'
+    @transaction.weekly_deposit && 'active'
   end
 
   private
 
   def amount_string
-    helpers.content_tag(:strong, helpers.smart_number_to_currency(@transaction.amount))
+    helpers.content_tag(:strong, amount_plus_minus_sign + helpers.smart_number_to_currency(@transaction.amount.abs), class: amount_text_css_class)
+  end
+
+  def amount_plus_minus_sign
+    if @transaction.amount.positive?
+      "-"
+    else
+      "+"
+    end
+  end
+
+  def amount_text_css_class
+    if @transaction.amount.positive?
+      'text-danger'
+    else
+      'text-success'
+    end
   end
 
   def company

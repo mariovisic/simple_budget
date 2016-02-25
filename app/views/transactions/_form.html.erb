@@ -3,7 +3,7 @@
   <%= form.input :purchased_at %>
   <%= form.input :name, input_html: { autocomplete: 'off' } %>
   <%= form.input :company, input_html: { autocomplete: 'off' } %>
-  <%= form.input :amount, as: :currency %>
+  <%= form.input :amount, as: :currency, hint: 'Enter expenses as positive amounts, deposits negative' %>
 
   <% if @transaction_form.persisted? %>
     <%= link_to 'Delete', transaction_path(@transaction_form.id), class: 'btn btn-danger', 'data-confirm' => "Are you sure you want to delete #{@transaction_form.name}?", 'data-method' => 'delete' %>

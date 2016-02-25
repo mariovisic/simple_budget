@@ -15,8 +15,9 @@
       <% @budgets.each do |budget| %>
         <tr>
           <td><%= link_to edit_budget_path(budget), class: 'table-row-link' do %><%= budget.name %><% end %></td>
-          <td class="text-center"><%= link_to edit_budget_path(budget), class: 'table-row-link' do %><%= smart_number_to_currency(budget.weekly_deposit) %><% end %></td>
+          <td><%= link_to edit_budget_path(budget), class: 'table-row-link' do %><%= smart_number_to_currency(budget.weekly_deposit) %><% end %></td>
         </tr>
       <% end %>
     </table>
   </div>
+</div>
