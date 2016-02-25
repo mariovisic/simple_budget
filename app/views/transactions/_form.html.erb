@@ -24,12 +24,12 @@
     });
 
     $('#transaction_name').typeahead({
-      source: <%= Transaction.pluck(:name).uniq.to_json.html_safe %>,
+      source: <%= Transaction.pluck(:name).compact.uniq.to_json.html_safe %>,
       afterSelect: function() { setTimeout(function() { $('#transaction_company').trigger('focus'); }, 10); }
     });
 
     $('#transaction_company').typeahead({
-      source: <%= Transaction.pluck(:company).uniq.to_json.html_safe %>,
+      source: <%= Transaction.pluck(:company).compact.uniq.to_json.html_safe %>,
       afterSelect: function() { setTimeout(function() { $('#transaction_amount').trigger('focus'); }, 10); }
     });
   });

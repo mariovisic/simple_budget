@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160220135127) do
+ActiveRecord::Schema.define(version: 20160225100216) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,7 +25,7 @@ ActiveRecord::Schema.define(version: 20160220135127) do
 
   create_table "transactions", force: :cascade do |t|
     t.string   "name",                                                    null: false
-    t.string   "company",                                                 null: false
+    t.string   "company"
     t.decimal  "amount",         precision: 10, scale: 2,                 null: false
     t.datetime "purchased_at",                                            null: false
     t.boolean  "weekly_deposit",                          default: false, null: false
