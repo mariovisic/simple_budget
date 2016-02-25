@@ -21,7 +21,7 @@ class BudgetUpdater
     if last_deposit_time.blank?
       @budget.transactions.create!({
         name: INITIAL_DEPOSIT_NAME,
-        amount: @budget.weekly_deposit * days_remaining_first_week / 7,
+        amount: -@budget.weekly_deposit * days_remaining_first_week / 7,
         purchased_at: @budget.created_at, weekly_deposit: true
       })
     end
@@ -35,7 +35,7 @@ class BudgetUpdater
     weekly_deposit_days.each do |time|
       @budget.transactions.create!({
         name: WEEKLY_DEPOSIT_NAME,
-        amount: @budget.weekly_deposit,
+        amount: -@budget.weekly_deposit,
         purchased_at: time,
         weekly_deposit: true
       })

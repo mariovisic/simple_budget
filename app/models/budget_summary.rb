@@ -93,6 +93,6 @@ class BudgetSummary
   end
 
   def balance_at_start_of_budget
-    @balance_at_start_of_budget ||= @budget.transactions.first.amount
+    @balance_at_start_of_budget ||= -@budget.transactions.first.amount
   end
 end
