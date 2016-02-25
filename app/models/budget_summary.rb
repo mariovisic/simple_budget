@@ -60,6 +60,7 @@ class BudgetSummary
         data[:success] = { amount: info_percentage / 100.0 * this_week_safe_to_spend.to_f, percentage: info_percentage }
       else
         data[:danger] = { amount: (weekly_spent_percentage - week_completed_percentage) / 100.0 * this_week_safe_to_spend.to_f, percentage: [weekly_spent_percentage - week_completed_percentage, 100 - data[:info][:percentage] ].min }
+        data[:info][:amount] = (data[:info][:amount] - data[:danger][:amount])
       end
 
       if weekly_spent_percentage < 100
