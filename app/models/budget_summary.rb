@@ -65,7 +65,9 @@ class BudgetSummary
       end
 
       if weekly_spent_percentage < 100
-        data[:remaining] = { amount: -(spent_this_week - this_week_safe_to_spend), percentage: 100 - data[:info][:percentage] - (data[:success].try(:[], :percentage) || 0) - (data[:danger].try(:[], :percentage) || 0) }
+        remaining_percent = 100 - data[:info][:percentage] - (data[:success].try(:[], :percentage) || 0) - (data[:danger].try(:[], :percentage) || 0)
+        remaining_amount  = this_week_safe_to_spend - data[:info][:amount] - (data[:success].try(:[], :amount) || 0) - (data[:danger].try(:[], :amount) || 0)
+        data[:remaining] = { amount: remaining_amount, percentage: remaining_percent }
       end
     end
   end
