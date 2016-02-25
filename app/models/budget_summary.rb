@@ -34,9 +34,6 @@ class BudgetSummary
     (remaining_seconds_this_week / (60 * 60 * 24).to_f).ceil
   end
 
-  def balance
-    -@budget.transactions.sum(:amount)
-  end
 
   def week_completed_percentage
     (remaining_seconds_this_week / seconds_in_a_week.to_f * 100).round
@@ -47,7 +44,11 @@ class BudgetSummary
   end
 
   def this_week_safe_to_spend
-    [balance_at_start_of_week, MINIMUM_BUDGET_PERCENTAGE * weekly_deposit].max
+    if @budget.created_at > 7.days.ago
+      balance_at_start_of_budget
+    else
+      [balance_at_start_of_week, MINIMUM_BUDGET_PERCENTAGE * weekly_deposit].max
+    end
   end
 
   # TODO: Pull out percentage chart to a new class I think !!!
@@ -69,8 +70,12 @@ class BudgetSummary
     end
   end
 
+  def balance
+    -@budget.transactions.sum(:amount)
+  end
+
   def spent_this_week
-    @spent_this_week ||= @budget.transactions.where("purchased_at > ?", Time.now.beginning_of_week).sum(:amount)
+    @spent_this_week ||= @budget.transactions.where("purchased_at > ?", Time.now.beginning_of_week).where(weekly_deposit: false).sum(:amount)
   end
 
   private
@@ -85,5 +90,9 @@ class BudgetSummary
 
   def balance_at_start_of_week
     @balance_at_start_of_week ||= -@budget.transactions.where("purchased_at <= ?", Time.now.beginning_of_week).sum(:amount)
+  end
+
+  def balance_at_start_of_budget
+    @balance_at_start_of_budget ||= @budget.transactions.first.amount
   end
 end
