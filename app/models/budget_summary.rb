@@ -22,9 +22,9 @@ class BudgetSummary
 
   def current_state_css_class
     case weekly_spent_percentage / week_completed_percentage.to_f * 100
-    when 0..90 then 'success'
-    when 90..100 then 'info'
-    when 100..110 then 'warning'
+    when 0..80 then 'success'
+    when 80..100 then 'info'
+    when 100..120 then 'warning'
     else
       'danger'
     end
@@ -36,11 +36,11 @@ class BudgetSummary
 
 
   def week_completed_percentage
-    (remaining_seconds_this_week / seconds_in_a_week.to_f * 100).round
+    (remaining_seconds_this_week / (60 * 60 * 24 * 7).to_f * 100).floor
   end
 
   def weekly_spent_percentage
-    (spent_this_week / (this_week_safe_to_spend).to_f * 100).round
+    (spent_this_week / (this_week_safe_to_spend).to_f * 100).floor
   end
 
   def this_week_safe_to_spend
@@ -54,21 +54,19 @@ class BudgetSummary
   # TODO: Pull out percentage chart to a new class I think !!!
   # TODO: Figure out how this works? LOL MATH!
   def percentage_chart_data
-    data = Hash.new.tap do |data|
-      data[:info] = { amount: [spent_this_week.to_f, 0].max.to_f, percentage: [weekly_spent_percentage, week_completed_percentage].min  }
-      if week_completed_percentage > weekly_spent_percentage
-        info_percentage = (week_completed_percentage - weekly_spent_percentage)
-        data[:success] = { amount: info_percentage / 100.0 * this_week_safe_to_spend.to_f, percentage: info_percentage }
+    overspend = spent_this_week - should_have_spent_this_week_so_far
+    spent_amount = spent_this_week - [overspend, 0].max
+    remaining = this_week_safe_to_spend - spent_amount - overspend.abs
+
+    Hash.new.tap do |data|
+      data[:info] = { amount: spent_amount, percentage: spent_amount / this_week_safe_to_spend * 100.0 }
+      if overspend.negative?
+        data[:success] = { amount: overspend.abs, percentage: overspend.abs / this_week_safe_to_spend * 100.0 }
       else
-        data[:danger] = { amount: (weekly_spent_percentage - week_completed_percentage) / 100.0 * this_week_safe_to_spend.to_f, percentage: [weekly_spent_percentage - week_completed_percentage, 100 - data[:info][:percentage] ].min }
-        data[:info][:amount] = (data[:info][:amount] - data[:danger][:amount])
+        data[:danger] = { amount: overspend, percentage: [overspend / this_week_safe_to_spend * 100.0, 100 - data[:info][:percentage]].min }
       end
 
-      if weekly_spent_percentage < 100
-        remaining_percent = 100 - data[:info][:percentage] - (data[:success].try(:[], :percentage) || 0) - (data[:danger].try(:[], :percentage) || 0)
-        remaining_amount  = this_week_safe_to_spend - data[:info][:amount] - (data[:success].try(:[], :amount) || 0) - (data[:danger].try(:[], :amount) || 0)
-        data[:remaining] = { amount: remaining_amount, percentage: remaining_percent }
-      end
+      data[:remaining] = { amount: remaining, percentage: remaining / this_week_safe_to_spend * 100.0 }
     end
   end
 
@@ -77,14 +75,14 @@ class BudgetSummary
   end
 
   def spent_this_week
-    @spent_this_week ||= @budget.transactions.where("purchased_at > ?", Time.now.beginning_of_week).where(weekly_deposit: false).sum(:amount)
+    @spent_this_week ||= [@budget.transactions.where("purchased_at > ?", Time.now.beginning_of_week).where(weekly_deposit: false).sum(:amount), 0].max
+  end
+
+  def should_have_spent_this_week_so_far
+    week_completed_percentage * this_week_safe_to_spend / 100.0
   end
 
   private
-
-  def seconds_in_a_week
-    60 * 60 * 24 * 7
-  end
 
   def remaining_seconds_this_week
     (Time.now.next_week - Time.now).to_i
