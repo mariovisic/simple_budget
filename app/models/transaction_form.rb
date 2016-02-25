@@ -1,9 +1,10 @@
 class TransactionForm
   include ActiveModel::Model
 
-  attr_accessor :id, :name, :company, :amount, :purchased_at, :created_at, :updated_at, :budget_id
+  attr_accessor :id, :name, :company, :amount, :purchased_at, :created_at, :updated_at, :budget_id, :weekly_deposit
   validates :name, :company, :amount, :purchased_at, presence: true
   validates :amount, numericality: true
+  validate :ensure_purchased_at_not_in_the_future
 
   def save
     valid? && persist_budget
@@ -31,5 +32,15 @@ class TransactionForm
 
   def budget_options
     Budget.all.map { |budget| [budget.name, budget.id] }
+  end
+
+  private
+
+  def ensure_purchased_at_not_in_the_future
+    parsed_purchased_at_date = Date.parse(purchased_at) rescue nil
+
+    if parsed_purchased_at_date.present? && parsed_purchased_at_date.future?
+      errors.add(:purchased_at, 'cannot be in the future')
+    end
   end
 end

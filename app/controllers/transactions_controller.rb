@@ -17,6 +17,30 @@ class TransactionsController < ApplicationController
     end
   end
 
+  def edit
+    transaction = Transaction.find(params[:id])
+
+    @transaction_form = TransactionForm.new(transaction.attributes)
+  end
+
+  def update
+    transaction = Transaction.find(params[:id])
+    @transaction_form = TransactionForm.new(transaction.attributes.merge(transaction_params))
+
+    if @transaction_form.save
+      redirect_to transactions_path, flash: { notice: "#{transaction.name} updated" }
+    else
+      render :new
+    end
+  end
+
+  def destroy
+    @transaction = Transaction.find(params[:id])
+    @transaction.destroy
+
+    redirect_to transactions_path, flash: { notice: "#{@transaction.name} deleted" }
+  end
+
   private
 
   def transaction_params

@@ -15,9 +15,9 @@
     </thead>
     <% @transactions.each do |transaction| %>
       <tr>
-        <td><%= transaction.name %> (<%= transaction.company %>)</td>
-        <td><%= smart_number_to_currency(transaction.amount) %></td>
-        <td><%= format_date(transaction.purchased_at) %></td>
+        <td><%= link_to edit_transaction_path(transaction), class: 'table-row-link' do %><%= transaction.name %> (<%= transaction.company %>)<% end %></td>
+        <td><%= link_to edit_transaction_path(transaction), class: 'table-row-link' do %><%= smart_number_to_currency(transaction.amount) %><% end %></td>
+        <td><%= link_to edit_transaction_path(transaction), class: 'table-row-link' do %><%= format_date(transaction.purchased_at) %><% end %></td>
       </tr>
     <% end %>
   </table>

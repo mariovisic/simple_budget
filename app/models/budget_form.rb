@@ -2,6 +2,7 @@ class BudgetForm
   include ActiveModel::Model
 
   attr_accessor :id, :name, :weekly_deposit, :created_at, :updated_at
+
   validates :name, :weekly_deposit, presence: true
   validates :weekly_deposit, numericality: { greater_than_or_equal_to: 0 }
 
