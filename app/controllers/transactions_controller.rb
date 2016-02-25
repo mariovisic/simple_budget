@@ -1,6 +1,6 @@
 class TransactionsController < ApplicationController
   def index
-    @transactions = Transaction.all.order('purchased_at DESC')
+    @transactions = Transaction.all.order('purchased_at DESC').map { |transaction| TransactionPresenter.new(transaction) }
   end
 
   def new

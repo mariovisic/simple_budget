@@ -5,18 +5,18 @@
     <h3 class="panel-title">Transactions</h3>
   </div>
   <div class="panel-body">
-  <table class="table table-striped">
+  <table class="table table-striped table-hover table-condensed">
     <thead>
       <tr>
-        <th>Name</th>
-        <th>Amount</th>
+        <th>Transaction</th>
+        <th>Budget</th>
         <th>When</th>
       </tr>
     </thead>
     <% @transactions.each do |transaction| %>
-      <tr>
-        <td><%= link_to edit_transaction_path(transaction), class: 'table-row-link' do %><%= transaction.name %> <%= transaction.company.present? ? "(#{transaction.company})" : nil %><% end %></td>
-        <td><%= link_to edit_transaction_path(transaction), class: 'table-row-link' do %><%= smart_number_to_currency(transaction.amount) %><% end %></td>
+      <tr class="<%= transaction.row_class %>">
+        <td><%= link_to edit_transaction_path(transaction), class: 'table-row-link' do %><%= transaction.name_string %><% end %></td>
+        <td><%= link_to edit_transaction_path(transaction), class: 'table-row-link' do %><%= transaction.budget_name %><% end %></td>
         <td><%= link_to edit_transaction_path(transaction), class: 'table-row-link' do %><%= format_date(transaction.purchased_at) %><% end %></td>
       </tr>
     <% end %>

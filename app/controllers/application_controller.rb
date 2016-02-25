@@ -4,6 +4,8 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   before_action :ensure_valid_password
+  before_action :update_budgets
+  before_action :assign_helpers
 
   private
 
@@ -15,5 +17,13 @@ class ApplicationController < ActionController::Base
 
   def password_protection
     @password_protection ||= ControllerPasswordProtection.new(self)
+  end
+
+  def update_budgets
+    BudgetUpdater.update_all
+  end
+
+  def assign_helpers
+    ApplicationPresenter.helpers = self.class.helpers
   end
 end

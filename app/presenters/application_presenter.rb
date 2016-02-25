@@ -1,7 +1,3 @@
 class ApplicationPresenter
-  protected
-
-  def helpers
-    Rails.application.helpers
-  end
+  cattr_accessor :helpers
 end
