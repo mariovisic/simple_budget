@@ -1,3 +1,5 @@
+require 'bcrypt'
+
 class LoginForm
   include ActiveModel::Model
 
