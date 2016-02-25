@@ -7,6 +7,10 @@ gem 'pg'
 gem 'simple_form'
 gem 'bcrypt', require: nil
 
+group :production do
+  gem 'rails_12factor'
+end
+
 group :development do
   gem 'web-console'
   gem 'spring'
