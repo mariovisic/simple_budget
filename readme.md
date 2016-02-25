@@ -15,3 +15,17 @@ settings as the app works just for me.
 - [ ] Import existing data
 - [ ] Deploy to heroku
 - [ ] Setup routine to run before controller actions to update weekly deposits if out of date
+
+
+## Password protecting the application
+
+The app has a VERY basic authorization system which entirely allows your blocks
+you from the app with a provided password (no username)
+
+To active simply set the PASSWORD_HASH environment variable to the bcrypt hash
+of your password, you can generate one with:
+
+```ruby
+require 'bcrypt'
+BCrypt::Password.create("my password")
+```

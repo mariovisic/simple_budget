@@ -1,0 +1,6 @@
+<h4>Please enter your password to continue</h4>
+
+<%= simple_form_for @login_form, url: session_path do |form| %>
+  <%= form.input :password %>
+  <%= form.submit 'Login', class: 'btn btn-primary' %>
+<% end %>
