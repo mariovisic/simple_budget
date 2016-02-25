@@ -36,6 +36,7 @@ class BudgetsController < ApplicationController
 
   def destroy
     @budget = Budget.find(params[:id])
+    @budget.transactions.destroy_all
     @budget.destroy
 
     redirect_to budgets_path, flash: { notice: "#{@budget.name} deleted" }
