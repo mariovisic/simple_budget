@@ -31,9 +31,8 @@ class BudgetSummary
   end
 
   def remaining_days_this_week
-    (remaining_seconds_this_week / (60 * 60 * 24).to_f).ceil
+    7 - Date.today.days_to_week_start
   end
-
 
   def week_completed_percentage
     (remaining_seconds_this_week / (60 * 60 * 24 * 7).to_f * 100).floor
@@ -60,13 +59,16 @@ class BudgetSummary
 
     Hash.new.tap do |data|
       data[:info] = { amount: spent_amount, percentage: spent_amount / this_week_safe_to_spend * 100.0 }
+
       if overspend.negative?
         data[:success] = { amount: overspend.abs, percentage: overspend.abs / this_week_safe_to_spend * 100.0 }
       else
-        data[:danger] = { amount: overspend, percentage: [overspend / this_week_safe_to_spend * 100.0, 100 - data[:info][:percentage]].min }
+        data[:danger] = { amount: overspend, percentage: 100 - (spent_amount + [remaining, 0].max)  / this_week_safe_to_spend * 100.0 }
       end
 
-      data[:remaining] = { amount: remaining, percentage: remaining / this_week_safe_to_spend * 100.0 }
+      if remaining.positive?
+        data[:remaining] = { amount: remaining, percentage: remaining / this_week_safe_to_spend * 100.0 }
+      end
     end
   end
 
