@@ -58,16 +58,16 @@ class BudgetSummary
     remaining = this_week_safe_to_spend - spent_amount - overspend.abs
 
     Hash.new.tap do |data|
-      data[:info] = { amount: spent_amount, percentage: spent_amount / this_week_safe_to_spend * 100.0 }
+      data[:info] = { amount: spent_amount.to_s, percentage: spent_amount / this_week_safe_to_spend * 100.0 }
 
       if overspend.negative?
-        data[:success] = { amount: overspend.abs, percentage: overspend.abs / this_week_safe_to_spend * 100.0 }
+        data[:success] = { amount: overspend.abs.to_s, percentage: overspend.abs / this_week_safe_to_spend * 100.0 }
       else
-        data[:danger] = { amount: overspend, percentage: 100 - (spent_amount + [remaining, 0].max)  / this_week_safe_to_spend * 100.0 }
+        data[:danger] = { amount: overspend.to_s, percentage: 100 - (spent_amount + [remaining, 0].max)  / this_week_safe_to_spend * 100.0 }
       end
 
       if remaining.positive?
-        data[:remaining] = { amount: remaining, percentage: remaining / this_week_safe_to_spend * 100.0 }
+        data[:remaining] = { amount: remaining.to_s, percentage: remaining / this_week_safe_to_spend * 100.0 }
       end
     end
   end
@@ -77,7 +77,7 @@ class BudgetSummary
   end
 
   def spent_this_week
-    @spent_this_week ||= [@budget.transactions.where("purchased_at > ?", Date.today.beginning_of_week).where(weekly_deposit: false).sum(:amount), 0].max
+    @spent_this_week ||= [@budget.transactions.where("purchased_at > ?", Time.now.utc.beginning_of_week).where(weekly_deposit: false).sum(:amount), 0].max
   end
 
   def should_have_spent_this_week_so_far
@@ -87,11 +87,11 @@ class BudgetSummary
   private
 
   def elapsed_seconds_this_week
-    (Date.today - Date.today.beginning_of_week).to_i
+    (Time.now.utc - Time.now.utc.beginning_of_week).to_i
   end
 
   def balance_at_start_of_week
-    @balance_at_start_of_week ||= -@budget.transactions.where("purchased_at <= ?", Date.today.beginning_of_week).sum(:amount)
+    @balance_at_start_of_week ||= -@budget.transactions.where("purchased_at <= ?", Time.now.utc.beginning_of_week).sum(:amount)
   end
 
   def balance_at_start_of_budget
