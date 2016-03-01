@@ -77,7 +77,7 @@ class BudgetSummary
   end
 
   def spent_this_week
-    @spent_this_week ||= [@budget.transactions.where("purchased_at > ?", Time.now.beginning_of_week).where(weekly_deposit: false).sum(:amount), 0].max
+    @spent_this_week ||= [@budget.transactions.where("purchased_at > ?", Date.today.beginning_of_week).where(weekly_deposit: false).sum(:amount), 0].max
   end
 
   def should_have_spent_this_week_so_far
@@ -87,11 +87,11 @@ class BudgetSummary
   private
 
   def elapsed_seconds_this_week
-    (Time.now - Time.now.beginning_of_week).to_i
+    (Date.today - Date.today.beginning_of_week).to_i
   end
 
   def balance_at_start_of_week
-    @balance_at_start_of_week ||= -@budget.transactions.where("purchased_at <= ?", Time.now.beginning_of_week).sum(:amount)
+    @balance_at_start_of_week ||= -@budget.transactions.where("purchased_at <= ?", Date.today.beginning_of_week).sum(:amount)
   end
 
   def balance_at_start_of_budget

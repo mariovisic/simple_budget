@@ -21,4 +21,5 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'capybara'
   gem 'timecop'
+  gem 'factory_girl_rails'
 end
