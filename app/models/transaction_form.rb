@@ -4,7 +4,7 @@ class TransactionForm
   attr_accessor :id, :name, :company, :amount, :purchased_at, :created_at, :updated_at, :budget_id, :weekly_deposit
   validates :name, :amount, :purchased_at, presence: true
   validates :amount, numericality: true
-  validate :ensure_purchased_at_not_in_the_future
+  validate :ensure_purchased_at_not_after_the_week
 
   def save
     valid? && persist_budget
@@ -36,11 +36,11 @@ class TransactionForm
 
   private
 
-  def ensure_purchased_at_not_in_the_future
+  def ensure_purchased_at_not_after_the_week
     parsed_purchased_at_date = Date.parse(purchased_at) rescue nil
 
-    if parsed_purchased_at_date.present? && parsed_purchased_at_date.future?
-      errors.add(:purchased_at, 'cannot be in the future')
+    if parsed_purchased_at_date.present? && parsed_purchased_at_date > Time.now.utc.end_of_week
+      errors.add(:purchased_at, 'cannot be after the week')
     end
   end
 end
