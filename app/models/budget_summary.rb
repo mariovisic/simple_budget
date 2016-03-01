@@ -43,7 +43,7 @@ class BudgetSummary
   end
 
   def this_week_safe_to_spend
-    if @budget.created_at > 7.days.ago
+    if @budget.created_at.utc.beginning_of_week == Time.now.utc.beginning_of_week
       balance_at_start_of_budget
     else
       [balance_at_start_of_week, MINIMUM_BUDGET_PERCENTAGE * weekly_deposit].max
