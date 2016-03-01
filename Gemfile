@@ -17,3 +17,8 @@ group :development do
   gem 'dotenv' # heroku handles this in production
 end
 
+group :development, :test do
+  gem 'rspec-rails'
+  gem 'capybara'
+  gem 'timecop'
+end
