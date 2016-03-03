@@ -6,6 +6,7 @@ gem 'rails', '4.2.5.1'
 gem 'pg'
 gem 'simple_form'
 gem 'bcrypt', require: nil
+gem 'puma'
 
 group :production do
   gem 'rails_12factor'
