@@ -23,7 +23,7 @@ class TransactionForm
   end
 
   def attributes
-    { budget_id: budget_id, name: name, company: company, amount: amount, purchased_at: purchased_at }
+    { budget_id: budget_id, name: name.try(:strip), company: company.try(:strip), amount: amount, purchased_at: purchased_at }
   end
 
   def model_name

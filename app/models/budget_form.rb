@@ -23,7 +23,7 @@ class BudgetForm
   end
 
   def attributes
-    { name: name, weekly_deposit: weekly_deposit }
+    { name: name.try(:strip), weekly_deposit: weekly_deposit }
   end
 
   def model_name
