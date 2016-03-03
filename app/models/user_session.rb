@@ -1,12 +1,16 @@
 require 'bcrypt'
 
-class ControllerPasswordProtection
+class UserSession
   def initialize(controller)
     @controller = controller
   end
 
-  def invalid?
+  def logged_out?
     password.present? && !@controller.session[:logged_in]
+  end
+
+  def logged_in?
+    !logged_out?
   end
 
   def grant_access

@@ -1,5 +1,6 @@
 class SessionsController < ApplicationController
-  skip_before_action :ensure_valid_password
+  skip_before_action :ensure_logged_in
+  before_action :ensure_logged_out
 
   def new
     @login_form = LoginForm.new
@@ -9,7 +10,7 @@ class SessionsController < ApplicationController
     @login_form = LoginForm.new(login_form_params)
 
     if @login_form.valid?
-      password_protection.grant_access
+      user_session.grant_access
       redirect_to root_path, flash: { notice: 'Logged in' }
     else
       render :new

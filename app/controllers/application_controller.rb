@@ -3,20 +3,26 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
-  before_action :ensure_valid_password
+  before_action :ensure_logged_in
   before_action :update_budgets
   before_action :assign_helpers
 
   private
 
-  def ensure_valid_password
-    if password_protection.invalid?
+  def ensure_logged_out
+    if user_session.logged_in?
+      redirect_to root_path
+    end
+  end
+
+  def ensure_logged_in
+    if user_session.logged_out?
       redirect_to new_session_path
     end
   end
 
-  def password_protection
-    @password_protection ||= ControllerPasswordProtection.new(self)
+  def user_session
+    @user_session ||= UserSession.new(self)
   end
 
   def update_budgets
