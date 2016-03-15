@@ -5,7 +5,7 @@ ruby '2.3.0'
 gem 'rails', '4.2.5.1'
 gem 'pg'
 gem 'simple_form'
-gem 'bcrypt', require: nil
+gem 'bcrypt'
 gem 'puma'
 
 group :production do
