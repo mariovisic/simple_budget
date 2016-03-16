@@ -31,7 +31,7 @@ class BudgetSummary
   end
 
   def remaining_days_this_week
-    7 - current_time_in_zone.to_date.days_to_week_start
+    7 - Time.zone.now.to_date.days_to_week_start
   end
 
   def week_completed_percentage
@@ -43,7 +43,7 @@ class BudgetSummary
   end
 
   def this_week_safe_to_spend
-    if @budget.created_at.beginning_of_week == current_time_in_zone.beginning_of_week
+    if @budget.created_at.beginning_of_week == Time.zone.now.beginning_of_week
       balance_at_start_of_budget
     else
       [balance_at_start_of_week, MINIMUM_BUDGET_PERCENTAGE * weekly_deposit].max
@@ -77,7 +77,7 @@ class BudgetSummary
   end
 
   def spent_this_week
-    @spent_this_week ||= [@budget.transactions.where("purchased_at > ?", current_time_in_zone.beginning_of_week).where(weekly_deposit: false).sum(:amount), 0].max
+    @spent_this_week ||= [@budget.transactions.where("purchased_at > ?", Time.zone.now.beginning_of_week).where(weekly_deposit: false).sum(:amount), 0].max
   end
 
   def should_have_spent_this_week_so_far
@@ -87,18 +87,14 @@ class BudgetSummary
   private
 
   def elapsed_seconds_this_week
-    (current_time_in_zone - current_time_in_zone.beginning_of_week).to_i
+    (Time.zone.now - Time.zone.now.beginning_of_week).to_i
   end
 
   def balance_at_start_of_week
-    @balance_at_start_of_week ||= -@budget.transactions.where("purchased_at <= ?", current_time_in_zone.beginning_of_week).sum(:amount)
+    @balance_at_start_of_week ||= -@budget.transactions.where("purchased_at <= ?", Time.zone.now.beginning_of_week).sum(:amount)
   end
 
   def balance_at_start_of_budget
     @balance_at_start_of_budget ||= -@budget.transactions.first.amount
-  end
-
-  def current_time_in_zone
-    CurrentTimeZone.with_current { Time.current }
   end
 end
