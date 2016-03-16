@@ -14,8 +14,12 @@
 <script>
   $(document).ready(function() {
     if($('#transaction_purchased_at').val() == "") {
-      $('#transaction_purchased_at').val(moment().format("DD/MM/YYYY hh:MM A"))
+      purchasedAtMoment = moment()
+    } else {
+      purchasedAtMoment = moment($('#transaction_purchased_at').val(), "YYYY-MM-DD hh:mm")
     }
+
+    $('#transaction_purchased_at').val(purchasedAtMoment.format("DD/MM/YYYY hh:mm A"))
 
     $('#transaction_purchased_at').datepicker({
       autoclose: true,
