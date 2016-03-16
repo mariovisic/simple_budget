@@ -39,7 +39,7 @@ class TransactionForm
   def ensure_purchased_at_not_after_the_week
     parsed_purchased_at_date = Time.zone.parse(purchased_at.to_s).to_date rescue nil
 
-    if parsed_purchased_at_date.present? && parsed_purchased_at_date > Time.current.end_of_week
+    if parsed_purchased_at_date.present? && parsed_purchased_at_date > Time.zone.now.end_of_week
       errors.add(:purchased_at, 'cannot be after the week')
     end
   end

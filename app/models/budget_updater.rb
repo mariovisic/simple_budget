@@ -43,7 +43,7 @@ class BudgetUpdater
   end
 
   def weekly_deposit_days
-    (last_deposit_time.tomorrow.to_date..Time.current.to_date).select(&:monday?).map(&:beginning_of_day)
+    (last_deposit_time.tomorrow.to_date..Time.zone.now.to_date).select(&:monday?).map { |date| date.to_time.beginning_of_day }
   end
 
   def last_deposit_time
