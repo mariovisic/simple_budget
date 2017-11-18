@@ -12,7 +12,7 @@ class BudgetSummary
   #
   # Although I think this approach is better as we're not flying blind
   #
-  MINIMUM_BUDGET_PERCENTAGE = ENV.fetch('MINIMUM_BUDGET_PERCENTAGE', 0.75)
+  MINIMUM_BUDGET_PERCENTAGE = ENV.fetch('MINIMUM_BUDGET_PERCENTAGE', 0.75).to_f
 
   delegate :name, :weekly_deposit, to: :@budget
 
