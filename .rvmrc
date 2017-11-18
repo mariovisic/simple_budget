@@ -1,1 +1,1 @@
-rvm use 2.3.0@simple_budget --create
+rvm use 2.3.3@simple_budget --create
