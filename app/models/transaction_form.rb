@@ -7,14 +7,14 @@ class TransactionForm
   validate :ensure_purchased_at_not_after_the_week
 
   def save
-    valid? && persist_budget
+    valid? && persist_transaction
   end
 
   def persisted?
     id.present?
   end
 
-  def persist_budget
+  def persist_transaction
     if persisted?
       Transaction.find(id).update_attributes!(attributes)
     else

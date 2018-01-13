@@ -1,0 +1,26 @@
+<%= simple_form_for @transfer_form do |form| %>
+  <%= form.input :transfer_at %>
+  <%= form.input :from_budget_id, as: :select, collection: @transfer_form.budget_options, include_blank: false, label: 'From' %>
+  <%= form.input :to_budget_id, as: :select, collection: @transfer_form.budget_options, include_blank: false, label: 'To' %>
+  <%= form.input :amount, as: :currency, hint: 'Enter expenses as positive amounts, deposits negative' %>
+
+  <%= form.submit class: 'btn btn-primary' %>
+<% end %>
+
+<script>
+  $(document).ready(function() {
+    if($('#transfer_transfer_at').val() == "") {
+      transferredAtMoment = moment()
+    } else {
+      transferredAtMoment = moment($('#transfer_transfer_at').val(), "YYYY-MM-DD hh:mm")
+    }
+
+    $('#transfer_transfer_at').val(transferredAtMoment.format("DD/MM/YYYY hh:mm A"))
+
+    $('#transfer_transfer_at').datepicker({
+      autoclose: true,
+      todayHighlight: true,
+      format: "dd/mm/yyyy"
+    });
+  })
+</script>
