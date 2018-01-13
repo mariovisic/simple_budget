@@ -8,7 +8,7 @@ RSpec.feature 'Transfers' do
     Transaction.create!(budget: budget_one, amount: -400, name: 'Initial funds deposit', purchased_at: Time.now)
 
     visit root_path
-    click_link 'New Transfer'
+    click_link 'Transfer'
 
     select 'Spendings', from: 'From'
     select 'Savings', from: 'To'
