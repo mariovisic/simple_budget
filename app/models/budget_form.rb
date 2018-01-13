@@ -6,6 +6,13 @@ class BudgetForm
   validates :name, :weekly_deposit, presence: true
   validates :weekly_deposit, numericality: { greater_than_or_equal_to: 0 }
 
+  def initialize(*args)
+    super
+    if @weekly_deposit.nil?
+      @weekly_deposit = 0
+    end
+  end
+
   def save
     valid? && persist_budget
   end

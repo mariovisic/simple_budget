@@ -12,6 +12,19 @@ RSpec.feature 'Budgets' do
 
     expect(page).to have_content('Budget created')
   end
+
+  scenario 'Creating a budget with no weekly deposit' do
+    visit root_path
+    click_link 'Budgets'
+    click_link 'New Budget'
+
+    fill_in 'Name', with: 'Savings'
+    fill_in 'Weekly deposit', with: '0'
+    click_button 'Create Budget'
+
+    visit root_path
+    expect(page).to have_content('Savings')
+  end
 end
 
 

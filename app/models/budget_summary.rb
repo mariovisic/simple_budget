@@ -84,6 +84,10 @@ class BudgetSummary
     week_completed_percentage * this_week_safe_to_spend / 100.0
   end
 
+  def has_weekly_deposit?
+    weekly_deposit > 0
+  end
+
   private
 
   def elapsed_seconds_this_week

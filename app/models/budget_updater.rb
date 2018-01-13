@@ -3,7 +3,7 @@ class BudgetUpdater
   INITIAL_DEPOSIT_NAME = 'Initial Deposit'
 
   def self.update_all
-    Budget.all.each { |budget| new(budget).update }
+    Budget.all.select { |budget| budget.weekly_deposit > 0 }.each { |budget| new(budget).update }
   end
 
   def initialize(budget)

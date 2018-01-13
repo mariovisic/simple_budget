@@ -1,22 +1,33 @@
 <p><%= link_to 'New Transaction', new_transaction_path, class: 'btn btn-primary' %></p>
 
 <% @budget_summaries.each do |budget_summary| %>
-  <div class="panel panel-<%= budget_summary.current_state_css_class %>">
-    <div class="panel-heading">
-       <h3 class="panel-title"><%= budget_summary.name %>: <%= smart_number_to_currency(budget_summary.balance) %></h3>
-    </div>
+  <% if budget_summary.has_weekly_deposit? %>
+    <div class="panel panel-<%= budget_summary.current_state_css_class %>">
+      <div class="panel-heading">
+         <h3 class="panel-title"><%= budget_summary.name %>: <%= smart_number_to_currency(budget_summary.balance) %></h3>
+      </div>
 
-    <div class="panel-body">
-      <p><strong><%= smart_number_to_currency(budget_summary.spent_this_week) %> </strong> / <strong> <%= smart_number_to_currency(budget_summary.this_week_safe_to_spend) %> </strong> spent this week.<br>
-      <strong><%= smart_number_to_currency(budget_summary.weekly_deposit) %></strong> to be added in <%= pluralize(budget_summary.remaining_days_this_week, 'days') %></p>
+      <div class="panel-body">
+        <p><strong><%= smart_number_to_currency(budget_summary.spent_this_week) %> </strong> / <strong> <%= smart_number_to_currency(budget_summary.this_week_safe_to_spend) %> </strong> spent this week.<br>
+        <strong><%= smart_number_to_currency(budget_summary.weekly_deposit) %></strong> to be added in <%= pluralize(budget_summary.remaining_days_this_week, 'days') %></p>
 
-      <div class="progress progress-tall">
-        <% budget_summary.percentage_chart_data.each do |key, value| %>
-          <div class="progress-bar progress-bar-striped progress-bar-tall progress-bar-<%= key %>" style="width: <%= value[:percentage] %>%">
-            <%= smart_number_to_currency(value[:amount], precision: 0) %>
-          </div>
-        <% end %>
+        <div class="progress progress-tall">
+          <% budget_summary.percentage_chart_data.each do |key, value| %>
+            <div class="progress-bar progress-bar-striped progress-bar-tall progress-bar-<%= key %>" style="width: <%= value[:percentage] %>%">
+              <%= smart_number_to_currency(value[:amount], precision: 0) %>
+            </div>
+          <% end %>
+        </div>
       </div>
     </div>
-  </div>
+  <% else %>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+         <h3 class="panel-title"><%= budget_summary.name %></h3>
+      </div>
+      <div class="panel-body">
+        <h4>Total: <%= smart_number_to_currency(budget_summary.balance) %></h4>
+      </div>
+    </div>
+  <% end %>
 <% end %>
