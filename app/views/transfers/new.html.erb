@@ -1,7 +1,7 @@
 <%= simple_form_for @transfer_form do |form| %>
   <%= form.input :transfer_at %>
   <%= form.input :from_budget_id, as: :select, collection: @transfer_form.budget_options, include_blank: false, label: 'From' %>
-  <%= form.input :to_budget_id, as: :select, collection: @transfer_form.budget_options, include_blank: false, label: 'To' %>
+  <%= form.input :to_budget_id, as: :select, collection: @transfer_form.budget_options, include_blank: false, label: 'To', selected: @transfer_form.to_budget_id || @transfer_form.budget_options[1] %>
   <%= form.input :amount, as: :currency, hint: 'Enter expenses as positive amounts, deposits negative' %>
 
   <%= form.submit class: 'btn btn-primary' %>
