@@ -1,6 +1,6 @@
 class BudgetsController < ApplicationController
   def index
-    @budgets = Budget.all
+    @budgets = Budget.all.order(:id)
   end
 
   def new

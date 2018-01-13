@@ -36,7 +36,7 @@ class TransferForm
   end
 
   def budget_options
-    Budget.all.map { |budget| [budget.name, budget.id] }
+    Budget.all.order(:id).map { |budget| [budget.name, budget.id] }
   end
 
   private
