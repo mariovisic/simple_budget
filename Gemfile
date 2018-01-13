@@ -2,8 +2,8 @@ source 'https://rubygems.org'
 
 ruby '2.3.3'
 
-gem 'rails', '4.2.5.1'
-gem 'pg'
+gem 'rails', '4.2.10'
+gem 'pg', '~> 0.15'
 gem 'simple_form'
 gem 'bcrypt'
 gem 'puma'
