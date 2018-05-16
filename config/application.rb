@@ -34,5 +34,6 @@ module SimpleBudget
 
 
     config.default_num_transactions_to_show = 20
+    config.min_transactions_for_quick_transaction = 10
   end
 end
