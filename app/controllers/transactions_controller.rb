@@ -1,6 +1,6 @@
 class TransactionsController < ApplicationController
   def index
-    @transactions = Transaction.includes(:budget).all.order('purchased_at DESC', 'id DESC').map { |transaction| TransactionPresenter.new(transaction) }
+    @transactions = Transaction.includes(:budget).all.limit(transactions_limit).order('purchased_at DESC', 'id DESC').map { |transaction| TransactionPresenter.new(transaction) }
   end
 
   def new
@@ -45,5 +45,9 @@ class TransactionsController < ApplicationController
 
   def transaction_params
     params.require(:transaction).permit(:budget_id, :name, :company, :amount, :purchased_at)
+  end
+
+  def transactions_limit
+    params.has_key?(:all) ? nil : Rails.application.config.default_num_transactions_to_show
   end
 end
