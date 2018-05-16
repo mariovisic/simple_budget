@@ -15,4 +15,15 @@ RSpec.feature 'Transactions' do
 
     expect(page).to have_content('Added Coffee')
   end
+
+  scenario 'Viewing the list of transactions' do
+    create(:transaction, name: 'Groceries', company: 'Woolworths', amount: 3.2, budget_id: budget.id)
+
+    visit root_path
+    click_link 'Transactions'
+
+    expect(page).to have_content('Groceries')
+    expect(page).to have_content('Woolworths')
+    expect(page).to have_content('$3.20')
+  end
 end
