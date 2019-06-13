@@ -50,28 +50,6 @@ class BudgetSummary
     end
   end
 
-  # TODO: Pull out percentage chart to a new class I think !!!
-  # TODO: Figure out how this works? LOL MATH!
-  def percentage_chart_data
-    overspend = spent_this_week - should_have_spent_this_week_so_far
-    spent_amount = spent_this_week - [overspend, 0].max
-    remaining = this_week_safe_to_spend - spent_amount - overspend.abs
-
-    Hash.new.tap do |data|
-      data[:info] = { amount: spent_amount.to_s, percentage: spent_amount / this_week_safe_to_spend * 100.0 }
-
-      if overspend.negative?
-        data[:success] = { amount: overspend.abs.to_s, percentage: overspend.abs / this_week_safe_to_spend * 100.0 }
-      else
-        data[:danger] = { amount: overspend.to_s, percentage: 100 - (spent_amount + [remaining, 0].max)  / this_week_safe_to_spend * 100.0 }
-      end
-
-      if remaining.positive?
-        data[:remaining] = { amount: remaining.to_s, percentage: remaining / this_week_safe_to_spend * 100.0 }
-      end
-    end
-  end
-
   def balance
     -@budget.transactions.sum(:amount)
   end

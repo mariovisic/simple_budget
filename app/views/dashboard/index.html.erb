@@ -12,7 +12,7 @@
         <strong><%= smart_number_to_currency(budget_summary.weekly_deposit) %></strong> to be added in <%= pluralize(budget_summary.remaining_days_this_week, 'days') %></p>
 
         <div class="progress progress-tall">
-          <% budget_summary.percentage_chart_data.each do |key, value| %>
+          <% BudgetPercentageChart.new(budget_summary).to_h.each do |key, value| %>
             <div class="progress-bar progress-bar-striped progress-bar-tall progress-bar-<%= key %>" style="width: <%= value[:percentage] %>%">
               <%= smart_number_to_currency(value[:amount], precision: 0) %>
             </div>
