@@ -4,7 +4,7 @@ class TransactionsController < ApplicationController
   end
 
   def new
-    @transaction_form = TransactionForm.new(optional_transaction_params)
+    @transaction_form = TransactionForm.new
   end
 
   def create
@@ -42,12 +42,6 @@ class TransactionsController < ApplicationController
   end
 
   private
-
-  def optional_transaction_params
-    if params.has_key?(:transaction)
-      params.require(:transaction).permit(:budget_id, :name, :company, :amount, :purchased_at)
-    end
-  end
 
   def transaction_params
     params.require(:transaction).permit(:budget_id, :name, :company, :amount, :purchased_at)

@@ -31,25 +31,3 @@
     </div>
   <% end %>
 <% end %>
-
-
-<div class="panel panel-info quick-transactions">
-  <div class="panel-heading">
-    <h3 class="panel-title">Quick Transactions</h3>
-  </div>
-  <div class="panel-body">
-  <table class="table table-striped table-hover table-condensed">
-    <thead>
-      <tr>
-        <th>Transaction</th>
-        <th>&nbsp;</th>
-      </tr>
-    </thead>
-    <% @quick_transactions.each do |quick_transaction| %>
-      <tr>
-        <td><%= link_to new_transaction_path(quick_transaction.attributes), class: 'table-row-link' do %><%= quick_transaction.name_string %><% end %></td>
-      </tr>
-    <% end %>
-  </table>
-  </div>
-</div>
