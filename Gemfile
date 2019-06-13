@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 ruby '2.6.3'
 
-gem 'rails', '4.2.10'
+gem 'rails', '4.2.11.1'
 gem 'pg', '~> 0.15'
 gem 'simple_form'
 gem 'bcrypt'
