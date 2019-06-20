@@ -1,0 +1,7 @@
+<% Budget.all.each do |budget| %>
+
+  <div class="weekly-budget-graph" id="weekly-budget-graph-<%= budget.id %>"></div>
+  <script>
+    var chart = c3.generate(<%= BudgetPresenter.new(budget).to_json %>);
+  </script>
+<% end %>

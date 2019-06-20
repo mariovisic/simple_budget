@@ -20,3 +20,10 @@
   text-decoration: none !important;
   color: inherit;
 }
+
+body, html, .container-fluid { width:100%; height:100%}
+
+.weekly-budget-graph {
+  width: 100%;
+  height: 40em;
+}
