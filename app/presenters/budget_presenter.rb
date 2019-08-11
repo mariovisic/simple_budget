@@ -1,21 +1,19 @@
 class BudgetPresenter < ApplicationPresenter
-  def initialize(budget)
-    @budget = budget
-  end
-
   def to_json
     ({
-      data: {
-        columns: totals + transaction_mapping,
-        type: 'bar',
-        types: { 'Total' => 'line' },
-        groups: [transaction_names]
+      point: {
+        r: 4
       },
-      bindto: "#weekly-budget-graph-#{@budget.id}",
+
+      data: {
+        columns: balances,
+        type: 'line'
+      },
+      bindto: "#weekly-budget-graph",
       axis: {
         x: {
           type: 'category',
-          categories: ['Total'] + transaction_weeks
+          categories: transaction_weeks
         },
       }
     }).to_json.html_safe
@@ -23,52 +21,42 @@ class BudgetPresenter < ApplicationPresenter
 
   private
 
-  def find_transactions
-    @transactions ||= @budget.transactions.where('amount > ? AND created_at > ? AND name != ?', 0, 6.months.ago, 'Transfer')
+  def starting_balance
+    @starting_balance ||= begin
+      first_transaction_id = find_transactions.first.id
+      -Transaction.where('id < ?', first_transaction_id).sum(:amount)
+    end
   end
 
+  def find_transactions
+    @transactions ||= Transaction.where('purchased_at > ? AND purchased_at < ? AND name != ?', 6.months.ago, 1.week.ago.end_of_week, 'Transfer')
+  end
 
   def transaction_weeks
     @transaction_weeks ||= (find_transactions.map do |transaction|
-      datetime_to_week(transaction.created_at)
+      datetime_to_week(transaction.purchased_at)
     end).uniq
-  end
-
-  def transaction_names
-    @transaction_names ||= find_transactions.map(&:name).uniq
-  end
-
-  def transaction_mapping
-    mapping = transaction_names.map do |name|
-      [name, Array.new(transaction_weeks.length)].flatten
-    end
-
-    find_transactions.each do |transaction|
-      name_index = transaction_names.index(transaction.name)
-      week_index = transaction_weeks.index(datetime_to_week(transaction.created_at)) + 1
-
-      mapping[name_index][week_index] ||= 0
-      mapping[name_index][week_index] += transaction.amount
-    end
-
-    mapping
   end
 
   private
 
   def datetime_to_week(datetime)
-    datetime.beginning_of_week.strftime("%d %b %Y")
+    datetime.end_of_week.strftime("%d %b %Y")
   end
 
-  def totals
+  def balances
     result = Array.new(transaction_weeks.length, 0)
 
     find_transactions.each do |transaction|
-      week_index = transaction_weeks.index(datetime_to_week(transaction.created_at))
-
-      result[week_index] += transaction.amount
+      week_index = transaction_weeks.index(datetime_to_week(transaction.purchased_at))
+      result[week_index] -= transaction.amount
     end
 
-    [['Total', result].flatten]
+    [['Balance', rolling_sum(starting_balance, result)].flatten]
+  end
+
+  def rolling_sum(starting, sums)
+    sum = starting
+    sums.map { |x| sum += x }
   end
 end
