@@ -1,22 +1,17 @@
-class BudgetPresenter < ApplicationPresenter
-  def to_json
-    ({
-      point: {
-        r: 4
-      },
+include ActionView::Helpers::NumberHelper
 
-      data: {
-        columns: balances,
-        type: 'line'
-      },
-      bindto: "#weekly-budget-graph",
-      axis: {
-        x: {
-          type: 'category',
-          categories: transaction_weeks
-        },
-      }
-    }).to_json.html_safe
+class BudgetPresenter < ApplicationPresenter
+  LARGE_TRANSACTION_THRESHOLD = 200
+
+  def to_json
+    puts '1'
+    puts balances.inspect
+    puts '2'
+    puts balances.to_json.inspect
+    puts '3'
+    #puts balances.to_json.html_safe.inspect
+    #balances.to_json.html_safe
+    balances.inspect.html_safe
   end
 
   private
@@ -29,7 +24,7 @@ class BudgetPresenter < ApplicationPresenter
   end
 
   def find_transactions
-    @transactions ||= Transaction.where('purchased_at > ? AND purchased_at < ? AND name != ?', 6.months.ago, 1.week.ago.end_of_week, 'Transfer')
+    @transactions ||= Transaction.where('purchased_at > ? AND purchased_at < ? AND name != ?', 6.months.ago, 1.week.ago.end_of_week, 'Transfer').order(:purchased_at)
   end
 
   def transaction_weeks
@@ -45,18 +40,29 @@ class BudgetPresenter < ApplicationPresenter
   end
 
   def balances
-    result = Array.new(transaction_weeks.length, 0)
+    week_data = Array.new(transaction_weeks.length) { { large_transactions: [], sum: 0 } }
 
     find_transactions.each do |transaction|
       week_index = transaction_weeks.index(datetime_to_week(transaction.purchased_at))
-      result[week_index] -= transaction.amount
+      week_data[week_index][:sum] += -transaction.amount
+
+      if transaction.amount > LARGE_TRANSACTION_THRESHOLD
+        week_data[week_index][:large_transactions].push(transaction)
+      end
     end
 
-    [['Balance', rolling_sum(starting_balance, result)].flatten]
-  end
+    sum = starting_balance
+    week_data.each_with_index.map do |data, index|
+      amount = (sum += data[:sum])
+      [transaction_weeks[index], amount.to_f, "<p>Balance: #{number_to_currency(amount)}</p> #{large_transaction_text(data[:large_transactions])}".html_safe]
+    end
+   end
 
-  def rolling_sum(starting, sums)
-    sum = starting
-    sums.map { |x| sum += x }
+  def large_transaction_text(transactions)
+    if transactions.present?
+      "<p><strong>Large Transactions:</strong><br>" + (transactions.map do |transaction|
+        "&nbsp;&nbsp;#{transaction.name}: #{number_to_currency(transaction.amount)}"
+      end).join("<br>") + "</p>"
+    end
   end
 end
