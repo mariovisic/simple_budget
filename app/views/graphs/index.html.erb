@@ -1,41 +1,29 @@
-<style type="text/css">
-  div.google-visualization-tooltip { 
-    padding: 1em;
-    font-size: 1em;
-  }
-</style>
-
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
-      google.charts.load('current', {'packages':['corechart']});
-      google.charts.setOnLoadCallback(drawChart);
+<script type="text/javascript">
+  google.charts.load('current', {'packages':['corechart']});
+  google.charts.setOnLoadCallback(drawChart);
 
-      function drawChart() {
-        var data = new google.visualization.DataTable();
-        data.addColumn('string', 'week');
-        data.addColumn('number', 'amount');
-        data.addColumn({type: 'string', role: 'tooltip', 'p': { 'html': true }});
+  function drawChart() {
+    var data = new google.visualization.DataTable();
+    data.addColumn('date', 'week');
+    data.addColumn('number', 'amount');
+    data.addColumn({type: 'string', role: 'tooltip', 'p': {'html': true}});
 
-        data.addRows(<%= BudgetPresenter.new.to_json %>);
+    data.addRows(<%= BudgetPresenter.new.to_json %>.map(function(row) {return [new Date(row[0]), row[1], row[2]];}));
 
-        var options = {
-          title: 'Company Performance',
-          legend: 'none',
-          tooltip: { isHtml: true }
-        };
+    var options = {
+      legend: 'none',
+      title: 'Balance over time',
+      explorer: {axis: 'horizontal', keepInBounds: true},
+      tooltip: {isHtml: true},
+      hAxis: {title: 'Date'},
+      vAxis: {title: 'Balance', format: '$### ### ###'}
+   };
 
-        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+    var chart = new google.visualization.LineChart(document.querySelector('.weekly-budget-graph'));
 
-        chart.draw(data, options);
-      }
-    </script>
-
-
-    <div class="weekly-budget-graph" id="curve_chart"></div>
-
-<!--
-<div class="weekly-budget-graph" id="weekly-budget-graph"></div>
-<script>
-  var chart = c3.generate(<%= BudgetPresenter.new.to_json %>);
+    chart.draw(data, options);
+ }
 </script>
--->
+
+<div class="weekly-budget-graph"></div>

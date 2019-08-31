@@ -1,16 +1,10 @@
+# TODO: Needs refactoring after updating the graphs
 include ActionView::Helpers::NumberHelper
 
 class BudgetPresenter < ApplicationPresenter
   LARGE_TRANSACTION_THRESHOLD = 200
 
   def to_json
-    puts '1'
-    puts balances.inspect
-    puts '2'
-    puts balances.to_json.inspect
-    puts '3'
-    #puts balances.to_json.html_safe.inspect
-    #balances.to_json.html_safe
     balances.inspect.html_safe
   end
 
@@ -24,7 +18,7 @@ class BudgetPresenter < ApplicationPresenter
   end
 
   def find_transactions
-    @transactions ||= Transaction.where('purchased_at > ? AND purchased_at < ? AND name != ?', 6.months.ago, 1.week.ago.end_of_week, 'Transfer').order(:purchased_at)
+    @transactions ||= Transaction.where('purchased_at < ? AND name != ?', 1.week.ago.end_of_week, 'Transfer').order(:purchased_at)
   end
 
   def transaction_weeks
@@ -54,15 +48,15 @@ class BudgetPresenter < ApplicationPresenter
     sum = starting_balance
     week_data.each_with_index.map do |data, index|
       amount = (sum += data[:sum])
-      [transaction_weeks[index], amount.to_f, "<p>Balance: #{number_to_currency(amount)}</p> #{large_transaction_text(data[:large_transactions])}".html_safe]
+      [transaction_weeks[index], amount.to_f, "<p class='transaction-tooltip'><strong>Balance:</strong> <span class='tooltip-amount'>#{number_to_currency(amount, precision: 0)}</span></p> #{large_transaction_text(data[:large_transactions])}".html_safe]
     end
    end
 
   def large_transaction_text(transactions)
     if transactions.present?
-      "<p><strong>Large Transactions:</strong><br>" + (transactions.map do |transaction|
-        "&nbsp;&nbsp;#{transaction.name}: #{number_to_currency(transaction.amount)}"
-      end).join("<br>") + "</p>"
+      "<ul class='large-transaction-tooltip'><strong>Large Transactions:</strong><br>" + (transactions.map do |transaction|
+        "<li class='large-transaction-tooltip-inner'>#{transaction.name}: <span class='tooltip-amount'>#{number_to_currency(transaction.amount, precision: 0)}</span></li>"
+      end).join + "</ul>"
     end
   end
 end
