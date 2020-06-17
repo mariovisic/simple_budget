@@ -39,4 +39,22 @@ RSpec.feature 'Transactions' do
     click_link 'Show all transactions'
     expect(page).to have_content('Woolworths')
   end
+
+  scenario 'editing a transaction' do
+    purchased_at = Time.zone.parse('Wed, 17 Jun 2020 01:25:00 UTC +00:00')
+    transaction = create(:transaction, name: 'Grozeries', company: 'Woolzorths', amount: 17.20, budget_id: budget.id, purchased_at: purchased_at)
+
+    visit root_path
+    click_link 'Transactions'
+    click_link 'Grozeries'
+
+    fill_in 'Name', with: 'Groceries'
+    fill_in 'Company', with: 'Woolworths'
+    click_button 'Update Transaction'
+
+    expect(page).to have_content('Grozeries updated')
+    expect(transaction.reload.name).to eq('Groceries')
+    expect(transaction.reload.company).to eq('Woolworths')
+    expect(transaction.reload.purchased_at).to eq(purchased_at)
+  end
 end
