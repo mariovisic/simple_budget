@@ -1,0 +1,3 @@
+steps:
+  - label: "Tests"
+    command: "bundle exec rspec"
