@@ -1,8 +1,8 @@
 source 'https://rubygems.org'
 
-ruby '2.6.6'
+ruby '2.7.4'
 
-gem 'rails', '4.2.11.1'
+gem 'rails', '~> 5.2'
 gem 'pg', '~> 0.15'
 gem 'simple_form'
 gem 'bcrypt'
@@ -23,4 +23,5 @@ group :development, :test do
   gem 'capybara'
   gem 'timecop'
   gem 'factory_girl_rails'
+  gem "rspec-buildkite-analytics", path: "/Users/mario.visic/Code/buildkite/rspec-buildkite-analytics"
 end
